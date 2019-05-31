@@ -69,7 +69,7 @@ def honeyconfig(port, msgOf, isfile, sound, log, logname)
 						end
 						sleep(2) 
 						if isfile == "y" || isfile == "Y"
-							f = File.read(msgOf)
+							f = File.read("#{File.dirname(__FILE__)}/src/main/#{msgOf}")
 							socket.write(f)
 						else
 							socket.write(msgOf)
@@ -104,15 +104,10 @@ case configuration
 		print "   -> "
 		port = gets_pb.chomp
 		puts ""
-		puts " Insert false message/file name to show (File only works for port 80)."
+		puts " Insert false message to show."
 		puts ""
 		print "   -> "
 		message = gets_pb.chomp
-		puts ""
-		puts " Is the above input file?"
-		puts ""
-		print " (y/n)   -> "
-		fl = gets_pb.chomp
 		puts ""
 		puts " Save a log with intrusions?"
 		puts ""
@@ -135,7 +130,7 @@ case configuration
 		puts ""
 		print " (y/n)   -> "
 		sound = gets_pb.chomp
-		honeyconfig(port, message, fl, sound, log, logname)
+		honeyconfig(port, message, "N", sound, log, logname)
 	else
 		puts ""
 		puts "Invalid option."
