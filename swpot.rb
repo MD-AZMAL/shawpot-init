@@ -17,7 +17,7 @@ puts ""
 print "-> "
 configuration = gets_pb.chomp
 
-def honeyconfig(port, message, sound, log, logname) 
+def honeyconfig(port, msgOf, isfile, sound, log, logname) 
 	begin
 		tcpserver = TCPServer.new("", port)
 		if tcpserver
@@ -68,7 +68,12 @@ def honeyconfig(port, message, sound, log, logname)
 							end
 						end
 						sleep(2) 
-						socket.write(message)
+						if isfile == "y" || isfile == "Y"
+							f = File.read(msgOf)
+							socket.write(f)
+						else
+							socket.write(msgOf)
+						end
 						socket.close
 					end
 				end
@@ -91,7 +96,7 @@ end
 
 case configuration
 	when "1"
-			honeyconfig(80, "<HEAD>\n<TITLE>Access denied C3i</TITLE>\n</HEAD>\n<H2>C3i Access Denied</H2>\n" + "<H2>Your details have been recorded </H2>\n<H2>by Shawpot C3i intrusion detection system </H2>"+ "<P>Further attempt might result in punishable offence</P>\n<BR>"+ "<P>\n#{Time.now.to_s}\n</P>", "N", "N", "")
+			honeyconfig(80, "index.html","Y", "N", "N", "")
 	when "2"
 		puts ""
 		puts " Insert port to Open."
@@ -99,10 +104,15 @@ case configuration
 		print "   -> "
 		port = gets_pb.chomp
 		puts ""
-		puts " Insert false message to show."
+		puts " Insert false message/file name to show (File only works for port 80)."
 		puts ""
 		print "   -> "
 		message = gets_pb.chomp
+		puts ""
+		puts " Is the above input file?"
+		puts ""
+		print " (y/n)   -> "
+		fl = gets_pb.chomp
 		puts ""
 		puts " Save a log with intrusions?"
 		puts ""
@@ -125,7 +135,7 @@ case configuration
 		puts ""
 		print " (y/n)   -> "
 		sound = gets_pb.chomp
-		honeyconfig(port, message, sound, log, logname)
+		honeyconfig(port, message, fl, sound, log, logname)
 	else
 		puts ""
 		puts "Invalid option."
