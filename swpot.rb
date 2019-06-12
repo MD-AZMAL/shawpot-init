@@ -48,7 +48,8 @@ def honeyconfig(port, msgOf, isfile, sound, log, logname)
 						puts ""
 						puts "  INTRUSION ATTEMPT DETECTED! from #{remoteIp}:#{remotePort} (#{Time.now.to_s})"
 						puts " -----------------------------"
-						reciv = socket.recv(1000).to_s
+						reciv = socket.recv(1000)
+						# reciv = recivD.to_s
 						puts reciv
 						if sound == "y" || sound == "Y"
 							puts "\a\a\a"
@@ -69,8 +70,18 @@ def honeyconfig(port, msgOf, isfile, sound, log, logname)
 						end
 						sleep(2) 
 						if isfile == "y" || isfile == "Y"
-							f = File.read("#{File.dirname(__FILE__)}/src/main/#{msgOf}")
-							socket.write(f)
+							fdata = File.read("#{File.dirname(__FILE__)}/src/main/#{msgOf}")
+							
+							rmip = "#{remoteIp}:#{remotePort}"
+							rmdev = reciv.split("User-Agent: ")[1].split("\n")[0].split("(")[1].split(")")[0]
+			
+							f = fdata.split('<div id="devinfo">')
+							f[0] += '<div id="devinfo">'
+							fdata = f[0] + "<p> IP : <span>" + rmip + "</span><br/>\nDevice : <span>" + rmdev + "<span><br/>" + f[1]
+							# df = reciv.split("\n")
+							# puts df[4].split(": ")[1]
+							# df.each_with_index {|val, index| puts "#{val} => #{index}" }
+							socket.write(fdata)
 						else
 							socket.write(msgOf)
 						end
