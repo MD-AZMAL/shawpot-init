@@ -13,3 +13,5 @@ chmod +x swbox.rb
   ```   
 * Connect to that ip using any web browser.   
 * You can use other device to connect to the same ip provided they are on same network.   
+
+# This project has been closed. Shawpot has been migrated to python
